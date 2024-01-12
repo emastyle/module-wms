@@ -7,6 +7,7 @@ namespace Gian\Wms\Service;
 use Gian\Wms\Api\Data\WmsResponseLoggerDataInterfaceFactory;
 use Gian\Wms\Model\WmsResponseLoggerRepository;
 use Gian\Wms\Service\Client\WmsClient;
+use Magento\Framework\Phrase;
 
 class WmsService
 {
@@ -20,35 +21,40 @@ class WmsService
     public function getQtyBySku(string $sku): array
     {
         $reason = null;
-        $status = false;
+        $status = true;
         $qty = null;
         try {
             $response = $this->wmsClient->doRequest('?sku=' . $sku);
 
             if ($response->getStatusCode() != 200) {
                 $reason = $response->getReasonPhrase();
-                $this->saveResponseLog($status, $sku, $qty, $reason);
-                return [$status, $qty, $reason];
+                $this->saveLogResponse($status, $sku, $qty, $reason);
+                return [false, $qty, $reason];
             }
 
-            $qty = json_decode($response->getBody()->getContents())->qty;
-            $status = true;
+            $qty = json_decode($response->getBody()->getContents())->qty ?? null;
+            if (!$qty) {
+                $reason = __('Error while retrieving product quantity!');
+                $status = false;
+            }
+
         } catch (\Exception $exception) {
             $reason = $exception->getMessage();
+            $status = false;
         }
 
-        $this->saveResponseLog($status, $sku, $qty, $reason);
+        $this->saveLogResponse($status, $sku, $qty, $reason);
         return [$status, $qty, $reason];
     }
 
-    private function saveResponseLog(bool $status, string $sku, null|int $qty, null|string $reason): void
+    private function saveLogResponse(bool $status, string $sku, null|int $qty, null|string|Phrase $reason): void
     {
         $responseData = $this->responseLoggerDataInterfaceFactory->create();
         $responseData
             ->setStatus((int) $status)
             ->setSku($sku)
             ->setQty($qty)
-            ->setErrorReason($reason);
+            ->setErrorReason((string) $reason);
         $this->loggerRepository->save($responseData);
     }
 }

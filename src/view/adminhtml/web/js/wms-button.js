@@ -8,7 +8,7 @@ define([
         };
         console.log(postData);
         var title = "Fail!";
-            $.ajax({
+        $.ajax({
             url: config.postUrl,
             type: 'post',
             dataType: 'json',
@@ -16,7 +16,7 @@ define([
             showLoader: true
         }).done(function (response) {
             console.log(typeof response);
-            if (response.status) {
+            if (response.status && response.qty !== null) {
                 title = "Success!";
                 $('input[name="product\\[quantity_and_stock_status\\]\\[qty\\]"]').val(response.qty).change();
             }
