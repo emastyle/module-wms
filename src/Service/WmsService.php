@@ -27,7 +27,7 @@ class WmsService
 
             if ($response->getStatusCode() != 200) {
                 $reason = $response->getReasonPhrase();
-                $this->saveLogResponse($status, $sku, $qty, $reason);
+                $this->saveResponseLog($status, $sku, $qty, $reason);
                 return [$status, $qty, $reason];
             }
 
@@ -37,11 +37,11 @@ class WmsService
             $reason = $exception->getMessage();
         }
 
-        $this->saveLogResponse($status, $sku, $qty, $reason);
+        $this->saveResponseLog($status, $sku, $qty, $reason);
         return [$status, $qty, $reason];
     }
 
-    private function saveLogResponse(bool $status, string $sku, null|int $qty, null|string $reason): void
+    private function saveResponseLog(bool $status, string $sku, null|int $qty, null|string $reason): void
     {
         $responseData = $this->responseLoggerDataInterfaceFactory->create();
         $responseData
