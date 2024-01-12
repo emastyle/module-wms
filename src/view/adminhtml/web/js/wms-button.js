@@ -6,7 +6,6 @@ define([
         var postData = {
             sku: sku
         };
-        console.log(postData);
         var title = "Fail!";
         $.ajax({
             url: config.postUrl,
@@ -15,7 +14,6 @@ define([
             data: postData,
             showLoader: true
         }).done(function (response) {
-            console.log(typeof response);
             if (response.status && response.qty !== null) {
                 title = "Success!";
                 $('input[name="product\\[quantity_and_stock_status\\]\\[qty\\]"]').val(response.qty).change();
