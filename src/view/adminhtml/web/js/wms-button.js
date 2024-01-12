@@ -6,7 +6,7 @@ define([
         var postData = {
             sku: sku
         };
-        var title = "Fail!";
+        var title = $.mage.__('Fail!');
         $.ajax({
             url: config.postUrl,
             type: 'post',
@@ -15,7 +15,7 @@ define([
             showLoader: true
         }).done(function (response) {
             if (response.status && response.qty !== null) {
-                title = "Success!";
+                title = $.mage.__('Success!');
                 $('input[name="product\\[quantity_and_stock_status\\]\\[qty\\]"]').val(response.qty).change();
             }
             alert({
