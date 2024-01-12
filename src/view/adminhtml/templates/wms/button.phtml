@@ -1,0 +1,11 @@
+<?php /** @var $viewModel \Gian\Wms\ViewModel\WmsInit **/ ?>
+<?php $viewModel = $block->getViewModel(); ?>
+<script type="text/x-magento-init">
+    {
+        "#wms-button": {
+            "gianWmsButton": {
+                "postUrl":"<?= $block->escapeUrl($viewModel->getWmsUrl()) ?>"
+            }
+        }
+    }
+</script>

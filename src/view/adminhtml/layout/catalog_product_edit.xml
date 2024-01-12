@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="header">
+            <block
+                ifconfig="gian_wms/settings/enabled"
+                template="Gian_Wms::wms/button.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Gian\Wms\ViewModel\WmsInit</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>
